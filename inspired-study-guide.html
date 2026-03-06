@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INSPIRED — Study Guide · Neurapulse</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface2: #253352;
+      --border: #2d4580;
+      --accent: #2563eb;
+      --gold: #93c5fd;
+      --teal: #60a5fa;
+      --navy: #1d4ed8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --card-bg: #1a2444;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      border-bottom: 2px solid var(--accent);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.2);
+    }
+
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+
+    .book-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #fff;
+    }
+
+    header h1 span { color: var(--gold); }
+
+    .header-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .progress-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* ─── LAYOUT ─── */
+    .main-layout { display: flex; flex: 1; }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 270px;
+      min-width: 270px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 1rem 0;
+      overflow-y: auto;
+      position: sticky;
+      top: 68px;
+      height: calc(100vh - 68px);
+    }
+
+    .sidebar-label {
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 0.5rem 1rem 0.5rem;
+    }
+
+    /* Part row */
+    .part-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      user-select: none;
+    }
+
+    .part-nav-item:hover { background: var(--surface2); }
+
+    .part-nav-item.active {
+      background: rgba(249,97,103,0.1);
+      border-left-color: var(--accent);
+    }
+
+    .part-badge {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--navy);
+      border: 1px solid rgba(47,60,126,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .part-nav-item.active .part-badge,
+    .part-nav-item.active .part-nav-text { color: var(--accent); }
+    .part-nav-item.active .part-badge { background: rgba(249,97,103,0.15); border-color: rgba(249,97,103,0.4); }
+
+    .part-nav-text {
+      flex: 1;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .part-expand-icon {
+      font-size: 0.65rem;
+      color: var(--muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .part-expand-icon.open { transform: rotate(90deg); }
+
+    /* Chapter sub-items */
+    .chapter-list {
+      display: none;
+      flex-direction: column;
+      background: rgba(0,0,0,0.15);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chapter-list.open { display: flex; }
+
+    .chapter-nav-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.45rem 1rem 0.45rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+      text-decoration: none;
+    }
+
+    .chapter-nav-item:hover { background: var(--surface2); }
+
+    .chapter-nav-item.active {
+      background: rgba(255,209,102,0.07);
+      border-left-color: var(--gold);
+    }
+
+    .chapter-nav-item.active .ch-num { background: var(--gold); color: #1a1a2e; border-color: var(--gold); }
+    .chapter-nav-item.active .ch-title { color: var(--gold); }
+
+    .ch-num {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ch-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .part-nav-locked { opacity: 0.35; pointer-events: none; }
+
+    /* ─── MAIN CONTENT ─── */
+    .content {
+      flex: 1;
+      padding: 2.5rem 3rem;
+      max-width: 920px;
+    }
+
+    /* ─── WELCOME SCREEN ─── */
+    .welcome-screen {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .welcome-book-cover {
+      width: 110px;
+      height: 150px;
+      background: linear-gradient(135deg, #1e3a8a, #0f172a);
+      border-radius: 8px 16px 16px 8px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.4rem;
+      box-shadow: -6px 6px 20px rgba(0,0,0,0.5), inset -3px 0 8px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-book-cover::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 12px;
+      background: linear-gradient(180deg, #2563eb, #60a5fa);
+      opacity: 0.9;
+    }
+
+    .welcome-book-cover .book-title {
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: #fff;
+    }
+
+    .welcome-book-cover .book-author {
+      font-size: 0.55rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 1px;
+    }
+
+    .welcome-screen h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 30%, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-screen p {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    .welcome-tags {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .tag.accent { border-color: var(--accent); color: var(--accent); background: rgba(249,97,103,0.08); }
+    .tag.gold   { border-color: var(--gold); color: var(--gold); background: rgba(255,209,102,0.08); }
+    .tag.teal   { border-color: var(--teal); color: var(--teal); background: rgba(6,214,160,0.08); }
+
+    /* ─── SECTION HEADER ─── */
+    .section-header {
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-eyebrow.gold-eye { color: var(--gold); }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .section-header .range-badge {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ─── TABS ─── */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab-btn {
+      padding: 0.6rem 1.1rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.85rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+      font-family: inherit;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .tab-btn:hover { color: var(--text); background: var(--surface2); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      background: rgba(249,97,103,0.06);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── CARDS ─── */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-card.accent-card { border-left: 4px solid var(--accent); }
+    .section-card.gold-card   { border-left: 4px solid var(--gold); }
+    .section-card.teal-card   { border-left: 4px solid var(--teal); }
+    .section-card.navy-card   { border-left: 4px solid #7b8fd4; }
+
+    .card-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .card-label.accent { color: var(--accent); }
+    .card-label.gold   { color: var(--gold); }
+    .card-label.teal   { color: var(--teal); }
+    .card-label.navy   { color: #7b8fd4; }
+
+    /* Summary */
+    .summary-text {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    /* Key Points */
+    .key-points-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .key-points-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .kp-bullet {
+      min-width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--navy);
+      border: 1px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Chapter briefs */
+    .chapter-brief-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .chapter-brief-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+
+    .chapter-brief-card:hover {
+      border-color: var(--gold);
+      background: rgba(255,209,102,0.05);
+    }
+
+    .cb-num {
+      min-width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(255,209,102,0.12);
+      border: 1px solid rgba(255,209,102,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .cb-content {}
+
+    .cb-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .cb-brief {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cb-open-hint {
+      margin-top: 0.4rem;
+      font-size: 0.73rem;
+      color: rgba(147,197,253,0.45);
+    }
+
+    /* Quotes */
+    .quote-block {
+      border-left: 3px solid var(--gold);
+      padding-left: 1rem;
+      margin: 0.5rem 0;
+    }
+
+    .quote-text {
+      font-style: italic;
+      color: var(--gold);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .quote-attr {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+
+    /* Reflection */
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .question-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .question-item:hover { border-color: var(--teal); background: rgba(6,214,160,0.05); }
+
+    .q-num {
+      min-width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: rgba(6,214,160,0.15);
+      border: 1px solid rgba(6,214,160,0.3);
+      color: var(--teal);
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .q-text { font-size: 0.88rem; line-height: 1.55; color: var(--text); }
+
+    /* Takeaways */
+    .takeaways-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .takeaway-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .takeaway-chip::before {
+      content: '▸';
+      color: var(--accent);
+      font-size: 0.7rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Concepts Grid */
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .concept-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .concept-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    .concept-emoji { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .concept-name  { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .concept-desc  { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+    /* ─── CHAPTER FULL VIEW (within part context) ─── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 0.3rem 0;
+      margin-bottom: 1.25rem;
+      transition: color 0.15s;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+
+    .back-btn:hover { color: var(--text); }
+
+    .breadcrumb {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .breadcrumb span { color: var(--accent); font-weight: 600; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in { animation: fadeIn 0.22s ease forwards; }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .content { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div style="display:flex;align-items:center;gap:0.5rem;margin-right:0.5rem;">
+        <svg width="22" height="22" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="36" height="36" rx="8" fill="#2563EB"/>
+          <path d="M8 26V10l7 10 7-10v16" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M26 10v16" stroke="#93C5FD" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span style="font-size:0.85rem;font-weight:700;letter-spacing:1px;color:#93c5fd;">neurapulse</span>
+      </div>
+      <div style="width:1px;height:28px;background:rgba(255,255,255,0.15);margin-right:0.5rem;"></div>
+      <div class="book-badge">Book Study</div>
+      <div>
+        <h1>INSP<span>I</span>RED</h1>
+        <div class="header-sub">by Marty Cagan · Personal Study Guide</div>
+      </div>
+    </div>
+    <span id="progress-pill" class="progress-pill">0 of 5 Parts</span>
+  </header>
+
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <div style="padding: 0 0 0.5rem;">
+        <div class="sidebar-label">Navigation</div>
+        <div class="part-nav-item active" onclick="showWelcome(this)" style="border-left-color: var(--accent);">
+          <span class="part-badge">🏠</span>
+          <span class="part-nav-text" style="color: var(--accent);">Overview</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-label">Parts</div>
+        <div id="parts-nav-list"></div>
+      </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- WELCOME -->
+      <div id="welcome-screen" class="welcome-screen animate-in">
+        <div class="welcome-book-cover">
+          <div class="book-title">INSPIRED</div>
+          <div class="book-author">Marty Cagan</div>
+        </div>
+        <h2>Your Personal Study Guide</h2>
+        <p>
+          Each Part of the book gets its own dedicated view with summary, key concepts,
+          chapter-by-chapter breakdowns, reflection questions, and takeaways.
+        </p>
+        <div class="welcome-tags">
+          <span class="tag accent">🎯 Key Concepts</span>
+          <span class="tag teal">💡 Reflection</span>
+          <span class="tag gold">✦ Takeaways</span>
+          <span class="tag">📖 Chapter Briefs</span>
+        </div>
+        <div style="margin-top:2rem; color:var(--muted); font-size:0.85rem;">
+          Prompt Claude with a chapter or part to get started →
+        </div>
+      </div>
+
+      <!-- DYNAMIC VIEW -->
+      <div id="dynamic-view" style="display:none;"></div>
+
+    </main>
+  </div>
+
+  <footer>
+    <span>INSPIRED</span> by Marty Cagan · Personal Study Guide · <span style="color:var(--accent);font-weight:600;">neurapulse</span> team learning
+  </footer>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════════
+  // DATA — Parts & Chapters
+  // ═══════════════════════════════════════════════════════════════════
+  //
+  // Schema for each part:
+  // {
+  //   id: "part1",
+  //   number: 1,
+  //   title: "...",
+  //   chaptersRange: "Chapters 1–6",
+  //   subtitle: "...",         // one-line theme
+  //   summary: "...",          // 2-4 sentence paragraph
+  //   keyPoints: ["..."],      // 4-6 bullets (HTML ok, e.g. <em>)
+  //   concepts: [              // 3-6 core concepts
+  //     { emoji, name, desc }
+  //   ],
+  //   quotes: [                // optional
+  //     { text, attr }
+  //   ],
+  //   questions: ["..."],      // 4-6 part-level reflection questions
+  //   takeaways: ["..."],      // 4-6 concise takeaways
+  //   chapters: [              // one entry per chapter in this part
+  //     {
+  //       id: "ch1",
+  //       number: 1,
+  //       title: "...",
+  //       subtitle: "...",
+  //       brief: "...",        // 1-2 sentence summary shown in chapter list
+  //       summary: "...",      // full paragraph summary (chapter detail view)
+  //       keyPoints: ["..."],
+  //       concepts: [...],
+  //       quotes: [...],
+  //       questions: ["..."],
+  //       takeaways: ["..."]
+  //     }
+  //   ]
+  // }
+
+  const parts = [
+    {
+      id: "part1",
+      number: 1,
+      title: "Lessons from Top Tech Companies",
+      chaptersRange: "Chapters 1–6",
+      subtitle: "The best tech companies operate fundamentally differently — and it starts with how they think about product teams.",
+      summary: "Part I lays the foundation for the entire book. Cagan examines what separates the world's best technology companies from the rest — not in terms of talent, but in how they approach building products. He profiles the distinct challenges at each stage of company growth: startups racing to find product/market fit, growth-stage companies struggling to scale what made them successful, and enterprises fighting to sustain innovation under organizational gravity. The part closes with a frank diagnosis of why most product efforts fail. The through-line: great products aren't a result of more talent or better project management — they're the result of fundamentally different thinking about how teams discover and deliver value.",
+      keyPoints: [
+        "The best tech companies give their product teams <em>problems to solve</em>, not features to build — this is the single biggest difference from how most companies operate.",
+        "Technology-powered products are uniquely improvable: unlike physical products, software can be continuously refined post-launch. This changes everything about how teams should think.",
+        "Company stage defines your biggest challenge: startups must find PMF before money runs out; growth companies must scale without losing what made them great; enterprises must sustain innovation despite organizational inertia.",
+        "Most companies have unknowingly adopted an <em>\"IT model\"</em> — stakeholders request features, PMs prioritize them, teams build them. This model consistently produces mediocre outcomes.",
+        "The root causes of product failure are systemic and predictable: wrong people in key roles, wrong process, lack of genuine product vision, and treating teams as feature factories."
+      ],
+      concepts: [
+        { emoji: "🎯", name: "Product/Market Fit", desc: "When your product genuinely resonates with a real market — the north star for startups" },
+        { emoji: "🏭", name: "Feature Factory", desc: "Teams that measure success by output (features shipped) rather than outcome (problems solved)" },
+        { emoji: "🔄", name: "IT Model", desc: "Stakeholders request → PM prioritizes → Team builds. Broken by design." },
+        { emoji: "📦", name: "Output vs. Outcome", desc: "Output = features shipped. Outcome = real change in user behavior or business results." },
+        { emoji: "🔍", name: "Continuous Discovery", desc: "Ongoing testing of product ideas before committing to build them" },
+        { emoji: "🚀", name: "Empowered Teams", desc: "Teams given a problem and trusted to figure out the best solution" },
+      ],
+      quotes: [
+        {
+          text: "Behind every great product there is someone — usually someone behind the scenes, working tirelessly — who led the product team to combine technology and design to solve real customer problems in a way that met the needs of the business.",
+          attr: "Marty Cagan, INSPIRED Ch. 1"
+        }
+      ],
+      questions: [
+        "Which company stage best describes where you are right now — and what unique challenges come with it?",
+        "Does your team operate more like a 'feature factory' or a genuine empowered product team? What's your evidence?",
+        "Where does your organization fall on the output vs. outcome spectrum? How do you currently measure product success?",
+        "What would need to change — in people, process, or culture — for your team to operate more like the best tech companies Cagan describes?",
+        "Which 'root cause of failure' from Chapter 6 resonates most with your current situation?"
+      ],
+      takeaways: [
+        "Give teams problems to solve, not features to build",
+        "Tech products are uniquely improvable — leverage continuous delivery",
+        "Stage matters: startup PMF, growth scaling, enterprise innovation",
+        "Most failures are process failures, not talent failures",
+        "Feature factories produce mediocre outcomes by design",
+        "Output ≠ Outcome — measure results, not activity"
+      ],
+      chapters: [
+        {
+          id: "ch1",
+          number: 1,
+          title: "Behind Every Great Product",
+          subtitle: "Every great tech product has a champion working behind the scenes — and this book is about becoming that person.",
+          brief: "Introduces the PM as the unsung champion behind every great product and establishes the Valuable + Usable + Feasible framework as the PM's core challenge.",
+          summary: "Cagan opens with the book's central thesis: behind every great tech product is a person — usually a product manager — who worked tirelessly to guide a team in combining technology and design to solve real customer problems, in a way that also met the needs of the business. This person is rarely visible to the public (Steve Jobs was the rare exception), but their impact is profound. Chapter 1 is intentionally brief and foundational — it signals that most companies approach product development incorrectly, and promises to reveal what the best product teams in the world actually do differently. The PM's role is framed not as a glorified project manager, but as the person ultimately responsible for making sure the team builds the right product.",
+          keyPoints: [
+            "Every great product has a champion — someone who leads the team to find the right solution at the intersection of technology, design, and business viability.",
+            "The product manager's core challenge: discover a product that is simultaneously <em>valuable</em> (customers will buy/use it), <em>usable</em> (they can figure it out), and <em>feasible</em> (engineers can build it).",
+            "Most companies produce mediocre products not because of a lack of talent, but because of how they approach the process — a systemic problem.",
+            "The book draws directly from the practices of the world's best product companies — these techniques aren't theoretical, they're what actually works.",
+            "The goal is products customers <em>love</em> — not merely tolerate. This distinction drives everything that follows."
+          ],
+          concepts: [
+            { emoji: "💡", name: "Valuable", desc: "Customers choose to buy or use it" },
+            { emoji: "🎨", name: "Usable", desc: "Customers can figure out how to use it" },
+            { emoji: "⚙️", name: "Feasible", desc: "Engineers can build it with available tech" },
+            { emoji: "🏆", name: "The Champion", desc: "The person behind every great product" },
+            { emoji: "❤️", name: "Love vs. Tolerate", desc: "The product bar Cagan sets throughout the book" },
+          ],
+          quotes: [
+            {
+              text: "Behind every great product there is someone — usually someone behind the scenes, working tirelessly — who led the product team to combine technology and design to solve real customer problems in a way that met the needs of the business.",
+              attr: "Marty Cagan, INSPIRED"
+            }
+          ],
+          questions: [
+            "Who currently plays the 'product champion' role in your organization? Is it clearly defined or diffuse?",
+            "Think of a product you genuinely love using. What did that team get right that others missed?",
+            "Does your team build products customers truly love, or ones they merely tolerate — and how would you know the difference?",
+            "What does 'solving real customer problems' mean specifically in your domain?",
+            "Where does your team currently struggle most: making something valuable, usable, or feasible?"
+          ],
+          takeaways: [
+            "Great products need a dedicated champion who owns the outcome",
+            "The PM bridges technology, design, and business simultaneously",
+            "Most product failures are process failures, not talent failures",
+            "The standard is products customers love — not just use",
+            "The best companies have specific practices worth studying"
+          ]
+        },
+        {
+          id: "ch2",
+          number: 2,
+          title: "Technology-Powered Products and Services",
+          subtitle: "Software is fundamentally different from other products — and that changes everything about how you build it.",
+          brief: "Explains what makes technology-powered products unique: they can be continuously improved post-launch, which changes how teams should approach discovery, delivery, and value creation.",
+          summary: "Cagan argues that technology-powered products are fundamentally different from physical products or professional services — and understanding this distinction is essential for building them well. Unlike a manufactured product that is fixed at the point of sale, software can be continuously updated, improved, and refined after it reaches customers. This creates a unique opportunity: teams can release something that works, learn from real usage, and iterate. But it also creates a unique responsibility — teams must embrace ongoing discovery and can't rely on a one-time 'big reveal' approach. The chapter sets up why traditional waterfall project management fails for software products.",
+          keyPoints: [
+            "Technology products can be continuously improved after launch — this is a structural advantage unavailable in most other industries.",
+            "Traditional project management (plan → build → release) is mismatched to software development, where the best learning happens through real usage.",
+            "The combination of technology and design creates leverage that wasn't previously possible — software can scale to millions of users without proportional cost increases.",
+            "Product teams must embrace a mindset of continuous iteration and discovery, not one-time delivery."
+          ],
+          concepts: [
+            { emoji: "🔄", name: "Continuous Delivery", desc: "Releasing improvements incrementally rather than in big-bang releases" },
+            { emoji: "📈", name: "Software Leverage", desc: "One product serving millions at marginal cost — unique to tech" },
+            { emoji: "🧪", name: "Learn from Usage", desc: "Real user behavior reveals what specs never could" },
+          ],
+          quotes: [],
+          questions: [
+            "How does your team currently leverage the ability to ship and learn continuously?",
+            "Where does your process still look more like waterfall than continuous discovery?",
+            "What would it mean for your team to truly embrace iteration over perfection?"
+          ],
+          takeaways: [
+            "Software is uniquely improvable — treat it that way",
+            "Plan-build-release is mismatched to how software works",
+            "Real usage teaches what specs never could",
+            "Embrace ongoing discovery, not one-time delivery"
+          ]
+        },
+        {
+          id: "ch3",
+          number: 3,
+          title: "Startups: Getting to Product/Market Fit",
+          subtitle: "The existential challenge for every startup: find what customers love before the money runs out.",
+          brief: "Describes the startup's unique challenge — achieving product/market fit before running out of runway — and why the process requires speed, learning, and a willingness to radically pivot.",
+          summary: "For startups, everything comes down to one challenge: find product/market fit (PMF) before the money runs out. Cagan describes this as an existential problem — companies at this stage can't afford to optimize processes or scale teams because it's not yet clear if the product has a viable market at all. The focus must be relentless discovery: getting in front of real customers, testing hypotheses quickly, and being willing to pivot when evidence demands it. The chapter warns against the trap of building too much too soon, and emphasizes that startups need speed-to-learning above all else.",
+          keyPoints: [
+            "Product/market fit is the startup's north star — everything else is secondary until you've found it.",
+            "Speed-to-learning matters more than speed-to-shipping. Building the wrong thing faster is not an advantage.",
+            "Startups must be willing to radically change direction when evidence demands it — premature scaling before PMF is a common killer.",
+            "The team at this stage is typically small enough that everyone should be deeply connected to customer discovery."
+          ],
+          concepts: [
+            { emoji: "🎯", name: "Product/Market Fit", desc: "When your product resonates deeply enough that a real market wants it" },
+            { emoji: "⚡", name: "Speed-to-Learning", desc: "Getting validated (or invalidated) insights as fast as possible" },
+            { emoji: "🔀", name: "The Pivot", desc: "A significant change in direction based on what you've learned" },
+          ],
+          quotes: [],
+          questions: [
+            "Has your team definitively found product/market fit? How do you know?",
+            "Are you optimizing for speed-to-learning or speed-to-shipping? What's the difference in your context?",
+            "What assumptions about your customers have you tested recently?"
+          ],
+          takeaways: [
+            "PMF is the only thing that matters at startup stage",
+            "Build to learn, not to launch",
+            "Premature scaling before PMF destroys startups",
+            "Stay close to customers — constantly"
+          ]
+        },
+        {
+          id: "ch4",
+          number: 4,
+          title: "Growth-Stage Companies: Scaling to Success",
+          subtitle: "Scaling is where many successful startups stumble — the practices that got you here won't get you there.",
+          brief: "Examines the challenge of scaling a product team after finding PMF — and why the informal processes that worked at startup stage become liabilities as the team grows.",
+          summary: "Once a company has found product/market fit, a new set of challenges emerges: how do you scale the team, the process, and the culture without losing what made you successful? Cagan describes this as one of the most dangerous transitions in a company's life. The informal, everyone-knows-everything culture that worked at 10 people breaks down at 50 or 100. New structures, roles, and processes are needed — but if adopted poorly, they can turn an innovative product culture into a bureaucratic feature factory. The chapter focuses on how to scale intentionally, preserving the ability to discover and innovate while adding the coordination needed for a larger organization.",
+          keyPoints: [
+            "The informal processes that work at startup stage become liabilities as the team scales — you need new structures without killing the culture.",
+            "Scaling too fast before establishing effective product practices leads to a loss of product quality and velocity.",
+            "The key challenge is distributing product decision-making to more people while maintaining alignment on strategy and outcomes.",
+            "Growth-stage companies must actively resist becoming feature factories even as stakeholder demands multiply."
+          ],
+          concepts: [
+            { emoji: "📐", name: "Scaling Process", desc: "Adding structure without adding bureaucracy" },
+            { emoji: "🧭", name: "Strategic Alignment", desc: "Keeping distributed teams rowing in the same direction" },
+            { emoji: "🌱", name: "Culture Preservation", desc: "Maintaining innovation mindset as the org grows" },
+          ],
+          quotes: [],
+          questions: [
+            "Has your organization scaled past the point where informal coordination still works?",
+            "What processes or structures have you added that help — vs. those that slow you down?",
+            "How do you maintain alignment on product strategy as more people join the team?"
+          ],
+          takeaways: [
+            "What works at 10 people breaks at 100",
+            "Scale intentionally — don't just add process",
+            "Distribute decisions while centralizing strategy",
+            "Actively resist the feature factory as you grow"
+          ]
+        },
+        {
+          id: "ch5",
+          number: 5,
+          title: "Enterprise Companies: Consistent Product Innovation",
+          subtitle: "The hardest challenge in product: sustaining innovation inside a large organization optimized for efficiency.",
+          brief: "Explores the unique challenge of large enterprises — maintaining the ability to innovate and discover when the entire organizational structure is optimized for execution and risk reduction.",
+          summary: "For large enterprises, the challenge isn't finding product/market fit or scaling — it's sustaining genuine product innovation in an environment that has been structurally optimized for efficiency and risk reduction. Cagan describes how enterprises tend to evolve toward treating product teams as IT departments: taking requirements from business stakeholders and delivering them on schedule. This isn't malicious — it's a natural response to the need for predictability at scale. But it kills innovation. The chapter explores what it takes for enterprises to maintain true product thinking, including protecting product teams from being turned into feature factories and creating the conditions for meaningful discovery at scale.",
+          keyPoints: [
+            "Large enterprises naturally evolve toward treating product teams as IT departments — this is the primary innovation killer at scale.",
+            "The organizational pressure for predictability and risk reduction directly conflicts with the uncertainty inherent in genuine product discovery.",
+            "Innovation labs and skunkworks projects rarely work — real innovation must happen in the core product teams.",
+            "Enterprise product leaders must actively fight organizational gravity to preserve the conditions for discovery and innovation."
+          ],
+          concepts: [
+            { emoji: "🏢", name: "Organizational Gravity", desc: "The tendency of large orgs to revert to execution-mode thinking" },
+            { emoji: "🛡️", name: "Protecting Discovery", desc: "Creating conditions for innovation despite enterprise pressure" },
+            { emoji: "⚖️", name: "Predictability vs. Innovation", desc: "The core enterprise tension product leaders must manage" },
+          ],
+          quotes: [],
+          questions: [
+            "Does your enterprise treat product teams as empowered problem-solvers or as IT execution teams?",
+            "Where do you feel the most organizational pressure to sacrifice discovery for predictability?",
+            "What would protecting your team's ability to innovate actually look like in practice?"
+          ],
+          takeaways: [
+            "Enterprise = IT model trap — resist it actively",
+            "Predictability and innovation are in constant tension",
+            "Innovation labs don't fix a broken core team culture",
+            "Product leaders must fight organizational gravity"
+          ]
+        },
+        {
+          id: "ch6",
+          number: 6,
+          title: "The Root Causes of Failed Product Efforts",
+          subtitle: "Failure isn't random — the same mistakes appear over and over, and they're almost always systemic.",
+          brief: "Names and diagnoses the specific, recurring root causes behind failed product efforts: wrong people, wrong process, and lack of genuine product vision and strategy.",
+          summary: "Cagan closes Part I with a direct, unsparing diagnosis of why product efforts fail. He argues that failure is almost never random — the same root causes appear repeatedly across companies of all sizes and stages. These include: putting the wrong people in key roles (especially PMs who act as project managers rather than product thinkers), using the wrong process (building to a requirements spec rather than discovering through experimentation), and lacking genuine product strategy (a clear, prioritized bet on how to win). The chapter names the 'feature factory' explicitly and calls it the default failure mode — when teams optimize for output rather than outcome, mediocrity is the predictable result.",
+          keyPoints: [
+            "The same root causes of failure appear across companies: wrong people in key roles, wrong process, lack of product vision/strategy.",
+            "PMs who act as project managers — taking requirements and managing delivery — are a leading cause of poor product outcomes.",
+            "The <em>feature factory</em> is the most common failure pattern: teams measure themselves by features shipped, not by problems solved or outcomes achieved.",
+            "Lack of genuine product strategy — a clear prioritized direction — leaves teams reacting to stakeholder demands rather than proactively discovering value.",
+            "Most of these failures are fixable, but require honest acknowledgment that the current approach isn't working."
+          ],
+          concepts: [
+            { emoji: "❌", name: "Root Cause #1: People", desc: "PMs acting as project managers, not product thinkers" },
+            { emoji: "❌", name: "Root Cause #2: Process", desc: "Building to spec instead of discovering through testing" },
+            { emoji: "❌", name: "Root Cause #3: Strategy", desc: "No clear product vision or prioritized direction" },
+            { emoji: "🏭", name: "Feature Factory", desc: "Optimizing for output (features) not outcome (results)" },
+          ],
+          quotes: [],
+          questions: [
+            "Which of the three root causes (people, process, strategy) is most present in your organization right now?",
+            "Is your PM team acting as true product managers or glorified project managers? What's the honest answer?",
+            "Does your team have a clear, shared product strategy — or are you reacting to whoever is loudest?",
+            "What would it take to honestly acknowledge and fix your team's primary root cause?"
+          ],
+          takeaways: [
+            "Product failure is almost always systemic, not random",
+            "Wrong people + wrong process + no strategy = feature factory",
+            "PMs who only manage delivery are a leading failure cause",
+            "Output-focused teams predictably produce mediocre results",
+            "Diagnosis is the first step — honest self-assessment required"
+          ]
+        }
+      ]
+    },
+    // ← Additional parts will be added as you study them
+  ];
+
+  const TOTAL_PARTS = 5;
+
+  // ═══════════════════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════════════════
+  let currentView = 'welcome'; // 'welcome' | 'part' | 'chapter'
+  let currentPartId = null;
+  let currentChapterId = null;
+
+  // ═══════════════════════════════════════════════════════════════════
+  // RENDER NAV
+  // ═══════════════════════════════════════════════════════════════════
+  function renderNav() {
+    const container = document.getElementById('parts-nav-list');
+    container.innerHTML = '';
+
+    parts.forEach(part => {
+      // Part row
+      const partEl = document.createElement('div');
+      partEl.className = 'part-nav-item';
+      partEl.dataset.partId = part.id;
+      partEl.innerHTML = `
+        <span class="part-badge">P${part.number}</span>
+        <span class="part-nav-text">${part.title}</span>
+        <span class="part-expand-icon" id="expand-${part.id}">▶</span>
+      `;
+      partEl.addEventListener('click', () => {
+        showPart(part.id);
+        toggleChapterList(part.id);
+      });
+      container.appendChild(partEl);
+
+      // Chapter sub-list
+      const chList = document.createElement('div');
+      chList.className = 'chapter-list';
+      chList.id = `chlist-${part.id}`;
+
+      part.chapters.forEach(ch => {
+        const chEl = document.createElement('div');
+        chEl.className = 'chapter-nav-item';
+        chEl.dataset.chapterId = ch.id;
+        chEl.innerHTML = `
+          <span class="ch-num">${ch.number}</span>
+          <span class="ch-title">${ch.title}</span>
+        `;
+        chEl.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showChapter(part.id, ch.id);
+        });
+        chList.appendChild(chEl);
+      });
+
+      container.appendChild(chList);
+    });
+
+    // Progress
+    document.getElementById('progress-pill').textContent = `${parts.length} of ${TOTAL_PARTS} Parts`;
+  }
+
+  function toggleChapterList(partId) {
+    const list = document.getElementById(`chlist-${partId}`);
+    const icon = document.getElementById(`expand-${partId}`);
+    const isOpen = list.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.chapter-list').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.part-expand-icon').forEach(el => el.classList.remove('open'));
+    // Open clicked if it wasn't already open
+    if (!isOpen) {
+      list.classList.add('open');
+      icon.classList.add('open');
+    }
+  }
+
+  function setActiveNavItem(partId, chapterId) {
+    document.querySelectorAll('.part-nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.chapter-nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.part-nav-text').forEach(el => el.style.color = '');
+    document.querySelectorAll('.part-badge').forEach(el => el.style.color = '');
+
+    if (partId) {
+      const partEl = document.querySelector(`.part-nav-item[data-part-id="${partId}"]`);
+      if (partEl) partEl.classList.add('active');
+    }
+    if (chapterId) {
+      const chEl = document.querySelector(`.chapter-nav-item[data-chapter-id="${chapterId}"]`);
+      if (chEl) chEl.classList.add('active');
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // SHOW WELCOME
+  // ═══════════════════════════════════════════════════════════════════
+  function showWelcome(el) {
+    currentView = 'welcome';
+    document.querySelectorAll('.part-nav-item').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.chapter-nav-item').forEach(e => e.classList.remove('active'));
+    if (el) el.classList.add('active');
+    document.getElementById('welcome-screen').style.display = 'block';
+    document.getElementById('dynamic-view').style.display = 'none';
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // SHOW PART
+  // ═══════════════════════════════════════════════════════════════════
+  function showPart(partId) {
+    const part = parts.find(p => p.id === partId);
+    if (!part) return;
+    currentView = 'part';
+    currentPartId = partId;
+    currentChapterId = null;
+
+    setActiveNavItem(partId, null);
+
+    document.getElementById('welcome-screen').style.display = 'none';
+    const view = document.getElementById('dynamic-view');
+    view.style.display = 'block';
+    view.className = 'animate-in';
+    view.innerHTML = buildPartHTML(part);
+    initTabs();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // SHOW CHAPTER
+  // ═══════════════════════════════════════════════════════════════════
+  function showChapter(partId, chapterId) {
+    const part = parts.find(p => p.id === partId);
+    if (!part) return;
+    const ch = part.chapters.find(c => c.id === chapterId);
+    if (!ch) return;
+
+    currentView = 'chapter';
+    currentPartId = partId;
+    currentChapterId = chapterId;
+
+    setActiveNavItem(partId, chapterId);
+
+    // Make sure chapter list is open
+    const chList = document.getElementById(`chlist-${partId}`);
+    const icon = document.getElementById(`expand-${partId}`);
+    if (chList) { chList.classList.add('open'); }
+    if (icon) { icon.classList.add('open'); }
+
+    document.getElementById('welcome-screen').style.display = 'none';
+    const view = document.getElementById('dynamic-view');
+    view.style.display = 'block';
+    view.className = 'animate-in';
+    view.innerHTML = buildChapterHTML(part, ch);
+    initTabs();
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // BUILD PART HTML
+  // ═══════════════════════════════════════════════════════════════════
+  function buildPartHTML(part) {
+    const keyPointsHTML = part.keyPoints.map((kp, i) => `
+      <li>
+        <span class="kp-bullet">${i + 1}</span>
+        <span>${kp}</span>
+      </li>
+    `).join('');
+
+    const conceptsHTML = (part.concepts || []).map(c => `
+      <div class="concept-card">
+        <div class="concept-emoji">${c.emoji}</div>
+        <div class="concept-name">${c.name}</div>
+        <div class="concept-desc">${c.desc}</div>
+      </div>
+    `).join('');
+
+    const quotesHTML = (part.quotes || []).map(q => `
+      <div class="quote-block">
+        <div class="quote-text">"${q.text}"</div>
+        ${q.attr ? `<div class="quote-attr">— ${q.attr}</div>` : ''}
+      </div>
+    `).join('');
+
+    const chapterBriefsHTML = part.chapters.map(ch => `
+      <div class="chapter-brief-card" onclick="showChapter('${part.id}', '${ch.id}')">
+        <div class="cb-num">${ch.number}</div>
+        <div class="cb-content">
+          <div class="cb-title">${ch.title}</div>
+          <div class="cb-brief">${ch.brief}</div>
+          <div class="cb-open-hint">Click to open full chapter view →</div>
+        </div>
+      </div>
+    `).join('');
+
+    const questionsHTML = part.questions.map((q, i) => `
+      <div class="question-item">
+        <div class="q-num">${i + 1}</div>
+        <div class="q-text">${q}</div>
+      </div>
+    `).join('');
+
+    const takeawaysHTML = part.takeaways.map(t => `
+      <div class="takeaway-chip">${t}</div>
+    `).join('');
+
+    return `
+      <div class="section-header">
+        <div class="section-eyebrow">Part ${part.number}</div>
+        <div class="range-badge">${part.chaptersRange}</div>
+        <h2>${part.title}</h2>
+        <div class="section-subtitle">${part.subtitle}</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="summary">📋 Summary</button>
+        <button class="tab-btn" data-tab="chapters">📖 Chapters</button>
+        <button class="tab-btn" data-tab="concepts">🧩 Concepts</button>
+        <button class="tab-btn" data-tab="reflect">💡 Reflection</button>
+        <button class="tab-btn" data-tab="takeaways">✦ Takeaways</button>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="tab-panel active" data-panel="summary">
+        <div class="section-card accent-card">
+          <div class="card-label accent"><span>📋</span> Part Summary</div>
+          <p class="summary-text">${part.summary}</p>
+        </div>
+        <div class="section-card gold-card">
+          <div class="card-label gold"><span>🎯</span> Key Points</div>
+          <ul class="key-points-list">${keyPointsHTML}</ul>
+        </div>
+        ${quotesHTML ? `<div class="section-card navy-card">
+          <div class="card-label navy"><span>💬</span> Notable Quotes</div>
+          ${quotesHTML}
+        </div>` : ''}
+      </div>
+
+      <!-- CHAPTERS -->
+      <div class="tab-panel" data-panel="chapters">
+        <div class="section-card gold-card">
+          <div class="card-label gold"><span>📖</span> Chapters in This Part</div>
+          <div class="chapter-brief-list">${chapterBriefsHTML}</div>
+        </div>
+      </div>
+
+      <!-- CONCEPTS -->
+      <div class="tab-panel" data-panel="concepts">
+        <div class="section-card">
+          <div class="card-label accent"><span>🧩</span> Core Concepts & Frameworks</div>
+          <div class="concepts-grid">${conceptsHTML}</div>
+        </div>
+      </div>
+
+      <!-- REFLECTION -->
+      <div class="tab-panel" data-panel="reflect">
+        <div class="section-card teal-card">
+          <div class="card-label teal"><span>💡</span> Reflection Questions</div>
+          <div class="questions-list">${questionsHTML}</div>
+        </div>
+      </div>
+
+      <!-- TAKEAWAYS -->
+      <div class="tab-panel" data-panel="takeaways">
+        <div class="section-card gold-card">
+          <div class="card-label gold"><span>✦</span> Key Takeaways</div>
+          <div class="takeaways-grid">${takeawaysHTML}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // BUILD CHAPTER HTML
+  // ═══════════════════════════════════════════════════════════════════
+  function buildChapterHTML(part, ch) {
+    const keyPointsHTML = ch.keyPoints.map((kp, i) => `
+      <li>
+        <span class="kp-bullet">${i + 1}</span>
+        <span>${kp}</span>
+      </li>
+    `).join('');
+
+    const conceptsHTML = (ch.concepts || []).map(c => `
+      <div class="concept-card">
+        <div class="concept-emoji">${c.emoji}</div>
+        <div class="concept-name">${c.name}</div>
+        <div class="concept-desc">${c.desc}</div>
+      </div>
+    `).join('');
+
+    const quotesHTML = (ch.quotes || []).map(q => `
+      <div class="quote-block">
+        <div class="quote-text">"${q.text}"</div>
+        ${q.attr ? `<div class="quote-attr">— ${q.attr}</div>` : ''}
+      </div>
+    `).join('');
+
+    const questionsHTML = ch.questions.map((q, i) => `
+      <div class="question-item">
+        <div class="q-num">${i + 1}</div>
+        <div class="q-text">${q}</div>
+      </div>
+    `).join('');
+
+    const takeawaysHTML = ch.takeaways.map(t => `
+      <div class="takeaway-chip">${t}</div>
+    `).join('');
+
+    return `
+      <button class="back-btn" onclick="showPart('${part.id}')">
+        ← Back to Part ${part.number}
+      </button>
+      <div class="breadcrumb">
+        Part ${part.number}: ${part.title} &rsaquo; <span>Chapter ${ch.number}</span>
+      </div>
+
+      <div class="section-header">
+        <div class="section-eyebrow gold-eye">Chapter ${ch.number}</div>
+        <h2>${ch.title}</h2>
+        <div class="section-subtitle">${ch.subtitle}</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="summary">📋 Summary</button>
+        <button class="tab-btn" data-tab="concepts">🧩 Concepts</button>
+        <button class="tab-btn" data-tab="reflect">💡 Reflection</button>
+        <button class="tab-btn" data-tab="takeaways">✦ Takeaways</button>
+      </div>
+
+      <div class="tab-panel active" data-panel="summary">
+        <div class="section-card accent-card">
+          <div class="card-label accent"><span>📋</span> Chapter Summary</div>
+          <p class="summary-text">${ch.summary}</p>
+        </div>
+        <div class="section-card gold-card">
+          <div class="card-label gold"><span>🎯</span> Key Points</div>
+          <ul class="key-points-list">${keyPointsHTML}</ul>
+        </div>
+        ${quotesHTML ? `<div class="section-card navy-card">
+          <div class="card-label navy"><span>💬</span> Notable Quotes</div>
+          ${quotesHTML}
+        </div>` : ''}
+      </div>
+
+      <div class="tab-panel" data-panel="concepts">
+        ${conceptsHTML ? `<div class="section-card">
+          <div class="card-label accent"><span>🧩</span> Core Concepts</div>
+          <div class="concepts-grid">${conceptsHTML}</div>
+        </div>` : `<div class="section-card"><p style="color:var(--muted); font-style:italic;">Concepts covered at the Part level for this chapter.</p></div>`}
+      </div>
+
+      <div class="tab-panel" data-panel="reflect">
+        <div class="section-card teal-card">
+          <div class="card-label teal"><span>💡</span> Reflection Questions</div>
+          <div class="questions-list">${questionsHTML}</div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-panel="takeaways">
+        <div class="section-card gold-card">
+          <div class="card-label gold"><span>✦</span> Key Takeaways</div>
+          <div class="takeaways-grid">${takeawaysHTML}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // TABS
+  // ═══════════════════════════════════════════════════════════════════
+  function initTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = btn.dataset.tab;
+        const parent = btn.closest('.content, #dynamic-view');
+        parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        parent.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        parent.querySelector(`[data-panel="${panel}"]`).classList.add('active');
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // INIT
+  // ═══════════════════════════════════════════════════════════════════
+  renderNav();
+  </script>
+</body>
+</html>
