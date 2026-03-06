@@ -1,7 +1,7 @@
 # INSPIRED Book Study — Session Context
 
 ## Project Overview
-Book study of **"INSPIRED: How to Create Tech Products Customers Love"** by Marty Cagan (2nd Edition).
+Book study of **"INSPIRED: How to Create Tech Products Customers Love"** by Marty Cagan — **always the 2nd Edition**. Never reference or draw from the 1st Edition.
 
 Two artifacts are maintained and updated part-by-part (with chapters nested within each part):
 
@@ -13,9 +13,18 @@ Two artifacts are maintained and updated part-by-part (with chapters nested with
 
 ---
 
+## Edition Rules
+
+- **Always use the 2nd Edition (2017/2018).** Never reference or draw from the 1st Edition (2008).
+- The 1st Edition was ~200 pages, ~20 chapters, with a simpler structure. It predates key concepts like Empowered Teams, Feature Factory, the IT Model, and the 5-part structure.
+- All content in both artifacts has been audited and verified as 2nd Edition only (as of Part 1).
+- When writing summaries, key points, or quotes for future parts: all material must be sourced exclusively from the 2nd Edition.
+
+---
+
 ## Parts Completed
 
-- [x] Part 1 — Lessons from Top Tech Companies (Ch. 1–6)
+- [x] Part 1 — Lessons from Top Tech Companies (Ch. 1–6) ✓ content audited, 2nd Edition verified
 
 ---
 
@@ -112,7 +121,7 @@ When the user asks to summarize a part or chapter:
   discussion: [                  // exactly 4 team discussion prompts (2 shown on Part slide)
     "...", "...", "...", "..."
   ],
-  callout: "...",                // bold phrase in coral callout box (bottom right)
+  callout: "...",                // bold phrase in blue callout box (bottom right)
   calloutLabel: "...",           // small label above callout
   chapters: [                    // one entry per chapter — each generates a Chapter slide
     {
