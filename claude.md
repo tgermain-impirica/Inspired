@@ -25,6 +25,10 @@ Two artifacts are maintained and updated part-by-part (with chapters nested with
 ## Parts Completed
 
 - [x] Part 1 — Lessons from Top Tech Companies (Ch. 1–6) ✓ content audited, 2nd Edition verified
+- [x] Part 2 — The Right People (Ch. 7–20) ✓ 14 chapters added
+- [x] Part 3 — The Right Product (Ch. 21–26) ✓ 6 chapters added
+- [x] Part 4 — The Right Process (Ch. 27–36) ✓ 10 chapters added
+- [x] Part 5 — The Right Culture (Ch. 37–40) ✓ 4 chapters added
 
 ---
 
