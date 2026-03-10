@@ -45,7 +45,7 @@
       box-shadow: 0 4px 24px rgba(37,99,235,0.2);
     }
 
-    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .header-left { display: flex; align-items: center; gap: 1rem; min-width: 0; overflow: hidden; }
 
     .book-badge {
       background: var(--accent);
@@ -714,6 +714,15 @@
     @media (max-width: 768px) {
       .hamburger { display: flex; }
 
+      header { padding: 0 1rem; overflow: hidden; }
+      .book-badge { display: none; }
+      .header-sub { display: none; }
+      .header-left .brand-text { display: none; }
+      .header-left .brand-divider { display: none; }
+      header h1 { font-size: 1.1rem; letter-spacing: 2px; }
+      .header-left { gap: 0.5rem; flex: 1; min-width: 0; }
+      .progress-pill { font-size: 0.7rem; padding: 3px 8px; }
+
       .sidebar {
         position: fixed;
         top: 68px;
@@ -741,16 +750,16 @@
           <path d="M8 26V10l7 10 7-10v16" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M26 10v16" stroke="#93C5FD" stroke-width="3" stroke-linecap="round"/>
         </svg>
-        <span style="font-size:0.85rem;font-weight:700;letter-spacing:1px;color:#93c5fd;">neurapulse</span>
+        <span class="brand-text" style="font-size:0.85rem;font-weight:700;letter-spacing:1px;color:#93c5fd;">neurapulse</span>
       </div>
-      <div style="width:1px;height:28px;background:rgba(255,255,255,0.15);margin-right:0.5rem;"></div>
+      <div class="brand-divider" style="width:1px;height:28px;background:rgba(255,255,255,0.15);margin-right:0.5rem;"></div>
       <div class="book-badge">Book Study</div>
       <div>
         <h1>INSP<span>I</span>RED</h1>
         <div class="header-sub">by Marty Cagan · Personal Study Guide</div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:0.75rem;">
+    <div style="display:flex;align-items:center;gap:0.75rem;flex-shrink:0;">
       <span id="progress-pill" class="progress-pill">0 of 5 Parts</span>
       <button class="hamburger" id="hamburger-btn" aria-label="Open navigation" onclick="toggleMobileNav()">
         <span></span><span></span><span></span>
